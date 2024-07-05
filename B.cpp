@@ -3,7 +3,7 @@ using namespace std;
 #include <cstring>
 class BinaryTree {
     int data;
-    BinaryTree*left, *right;
+    BinaryTree* left, * right;
 public:
     BinaryTree() {
         data = 0;
@@ -12,9 +12,9 @@ public:
     ~BinaryTree() {}
     BinaryTree(int n);
     BinaryTree* insert(BinaryTree*, int);
-    bool nodeFinder(BinaryTree*,int );
-    void inOrder(BinaryTree*);
-    void preOrder(BinaryTree*);
+    bool nodeFinder(BinaryTree*, int) const;
+    void inOrder(BinaryTree*) const;
+    void preOrder(BinaryTree*) const;
 };
 BinaryTree::BinaryTree(int n) {
     data = n;
@@ -32,28 +32,26 @@ BinaryTree* BinaryTree::insert(BinaryTree* root, int value) {
     }
     return root;
 }
-bool BinaryTree::nodeFinder(BinaryTree* tree,int key){
-    if(!tree) return;
-    if(tree->data == key) return true;
-    bool b1 =  nodeFinder(tree->left,key);
-    if(b1) return true;
-    bool b2 =  nodeFinder(tree->right,key);
-    return b2;
-    }
-void BinaryTree::inOrder(BinaryTree* tree) {
+bool BinaryTree::nodeFinder(BinaryTree* tree, int key) const {
+    if (!tree) return false;
+    if (tree->data == key) return true;
+    if (key < tree->data) return nodeFinder(tree->left, key);
+    return nodeFinder(tree->right, key);
+}
+void BinaryTree::inOrder(BinaryTree* tree) const {
     if (!tree) return;
     inOrder(tree->left);
     cout << " " << tree->data;
     inOrder(tree->right);
 }
-void BinaryTree::preOrder(BinaryTree* tree) {
+void BinaryTree::preOrder(BinaryTree* tree) const {
     if (!tree) return;
     cout << " " << tree->data;
     preOrder(tree->left);
     preOrder(tree->right);
 }
 int main() {
-    BinaryTree tree, *root = NULL;
+    BinaryTree tree, * root = NULL;
     char op_name[13]; int n;
     std::cin >> n;
     for (int i = 0; i < n; i++) {
@@ -64,13 +62,10 @@ int main() {
             tree.preOrder(root);
             std::cout << "\n";
         }
-        else if(strcmp(op_name,"find")== 0){
+        else if (strcmp(op_name, "find") == 0) {
             int val;
             std::cin >> val;
-            if(tree.nodeFinder(root,val)){
-                std::cout << "yes" << endl;
-            }
-            else std::cout << "no" << endl;
+            std::cout << (tree.nodeFinder(root,val) ? "yes" : "no") << endl;
         }
         else {
             int val;
